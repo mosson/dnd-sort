@@ -41,7 +41,10 @@ function isHover(event: MouseEvent, element: HTMLElement): boolean {
   );
 }
 
-export const useDnDSort = <T>(defaultItems: T[]): DnDSortResult<T>[] => {
+export const useDnDSort = <T>(
+  defaultItems: T[],
+  onSort: (items: T[]) => void
+): DnDSortResult<T>[] => {
   const [items, setItems] = useState(defaultItems);
 
   // useStateを使うこともできるが、useRefを使うことで値の変更で再描画しない
@@ -94,7 +97,9 @@ export const useDnDSort = <T>(defaultItems: T[]): DnDSortResult<T>[] => {
       const { left: x, top: y } = dragElement.element.getBoundingClientRect();
       dragElement.position = { x, y };
 
-      setItems(dndItems.map((v) => v.value));
+      const sorted = dndItems.map((v) => v.value);
+      setItems(sorted);
+      onSort(sorted);
     }
   };
 
@@ -168,7 +173,8 @@ export const useDnDSort = <T>(defaultItems: T[]): DnDSortResult<T>[] => {
             element.style.transform = `translate(${x}px, ${y}px)`;
 
             requestAnimationFrame(() => {
-              element.style.transition = "transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+              element.style.transition =
+                "transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
               element.style.transform = "";
             });
           }

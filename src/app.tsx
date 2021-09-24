@@ -23,7 +23,7 @@ const cardStyle: Style<HTMLDivElement> = {
   overflow: "hidden",
   display: "inline-flex",
   alignItems: "center",
-  alignContent: "center"
+  alignContent: "center",
 };
 
 const imgStyle: Style<HTMLImageElement> = {
@@ -31,16 +31,17 @@ const imgStyle: Style<HTMLImageElement> = {
 };
 
 export const App = () => {
-  const results: DnDSortResult<string>[] = useDnDSort<string>(imageLists);
+  const results: DnDSortResult<string>[] = useDnDSort<string>(
+    imageLists,
+    (items) => {
+      console.log(items);
+    }
+  );
   return (
     <div style={containerStyle}>
       {results.map((item) => (
         <div key={item.key} style={cardStyle} {...item.events}>
-          <img
-            src={item.value}
-            alt={item.value}
-            style={imgStyle}
-          />
+          <img src={item.value} alt={item.value} style={imgStyle} />
         </div>
       ))}
     </div>
