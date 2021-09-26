@@ -2,11 +2,11 @@ import React from "react";
 
 import { useDnDSort, DnDSortResult } from "./hooks/dnd-sort";
 
-const imageLists: string[] = Array(9)
-  .fill(0)
-  .map(() => {
-    return `https://picsum.photos/150?${Math.floor(Math.random() * 10000)}`;
-  });
+const lists: string[] = Array(9)
+.fill(0)
+.map((_, i) => {
+  return i.toString();
+});
 
 type Style<T extends HTMLElement> = React.HTMLAttributes<T>["style"];
 
@@ -15,33 +15,34 @@ const containerStyle: Style<HTMLDivElement> = {
   flexWrap: "wrap",
   justifyContent: "space-between",
   width: "100%",
-  maxWidth: "500px",
+  maxWidth: "360px",
 };
 
 const cardStyle: Style<HTMLDivElement> = {
   borderRadius: "4px",
-  overflow: "hidden",
+  width: "100px",
+  height: "100px",
+  margin: "10px",
+  boxSizing: "border-box",
+  border: "1px solid #000",
   display: "inline-flex",
   alignItems: "center",
   alignContent: "center",
+  justifyContent: "center"
 };
 
-const imgStyle: Style<HTMLImageElement> = {
-  pointerEvents: "none",
-};
-
-export const App = () => {
+export const App: React.FC = () => {
   const results: DnDSortResult<string>[] = useDnDSort<string>(
-    imageLists,
+    lists,
     (items) => {
-      console.log(items);
+      console.log(items, lists);
     }
   );
   return (
     <div style={containerStyle}>
       {results.map((item) => (
         <div key={item.key} style={cardStyle} {...item.events}>
-          <img src={item.value} alt={item.value} style={imgStyle} />
+          {item.value}
         </div>
       ))}
     </div>
